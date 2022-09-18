@@ -3,9 +3,9 @@
 onload = function () {
   if ("speechSynthesis" in window) {
     /* speech synthesis supported */
-    alert("Soy compatible");
+    // alert("Soy compatible");
   } else {
-    alert("No soy compatible");
+    // alert("No soy compatible");
 
     /* speech synthesis not supported */
   }
@@ -20,9 +20,9 @@ onload = function () {
     var stopEle = document.querySelector("#stop");
 
     /* click event handlers for the buttons */
-    playEle.addEventListener("click", onClickPlay);
-    pauseEle.addEventListener("click", onClickPause);
-    stopEle.addEventListener("click", onClickStop);
+    playEle.addEventListener("mouseover", onClickPlay, false);
+    pauseEle.addEventListener("mouseover", onClickPause);
+    stopEle.addEventListener("mouseover", onClickStop);
 
     function onClickPlay() {
       if (!flag) {
@@ -88,3 +88,38 @@ if (
   speechSynthesis.onvoiceschanged = populateVoiceList;
 }
 //#endregion
+
+//#region mousehover
+// let test = document.getElementById("test");
+
+// test.addEventListener("mouseover", function( event ) {
+//   alert("Hola: ", event);
+// });
+
+
+// test.addEventListener("mouseout", function( event ) {
+//   event.target.style.background = "orange";
+// });
+//#endregion mousehover
+
+container.onmouseover = container.onmouseout = handler;
+
+function handler(event) {
+
+  function str(el) {
+    if (!el) return "null"
+    return el.className || el.tagName;
+  }
+
+  log.value += event.type + ':  ' +
+    'target=' + str(event.target) +
+    ',  relatedTarget=' + str(event.relatedTarget) + "\n";
+  log.scrollTop = log.scrollHeight;
+
+  if (event.type == 'mouseover') {
+    event.target.style.background = 'pink'
+  }
+  if (event.type == 'mouseout') {
+    event.target.style.background = ''
+  }
+}
