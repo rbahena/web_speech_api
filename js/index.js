@@ -62,10 +62,14 @@ document.querySelector("#voices").addEventListener("change", () => {
 
 document.querySelector("#start").addEventListener("click", () => {
   // Set the text property with the value of the textarea
-  var text = document.getElementsByClassName("read");
-  speech.text = text[0].innerHTML;
-  // Start Speaking
-  window.speechSynthesis.speak(speech);
+  var texts = document.getElementsByClassName("read");
+
+  for (let index = 0; index < texts.length; index++) {
+    speech.text = texts[index].innerHTML;
+
+    // Start Speaking
+    window.speechSynthesis.speak(speech);
+  }
 });
 
 document.querySelector("#pause").addEventListener("click", () => {
