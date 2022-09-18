@@ -1,125 +1,84 @@
-// Reference: https://www.ebooz.com/como-anadir-un-sintetizador-de-texto-a-voz-de-audio-a-tu-pagina-web/
+// Reference: https://betterprogramming.pub/convert-text-to-speech-using-web-speech-api-in-javascript-c9710bbb2d41
 
-onload = function () {
-  if ("speechSynthesis" in window) {
-    /* speech synthesis supported */
-    // alert("Soy compatible");
-  } else {
-    // alert("No soy compatible");
+// Initialize new SpeechSynthesisUtterance object
+let speech = new SpeechSynthesisUtterance();
 
-    /* speech synthesis not supported */
-  }
+// Set Speech Language
+speech.lang = "es";
 
-  if ("speechSynthesis" in window) {
-    var synth = speechSynthesis;
-    var flag = false;
+let voices = []; // global array of available voices
 
-    /* references to the buttons */
-    var playEle = document.querySelector("#play");
-    var pauseEle = document.querySelector("#pause");
-    var stopEle = document.querySelector("#stop");
+window.speechSynthesis.onvoiceschanged = () => {
+  // Get List of Voices
+  voices = window.speechSynthesis.getVoices();
 
-    /* click event handlers for the buttons */
-    playEle.addEventListener("mouseover", onClickPlay, false);
-    pauseEle.addEventListener("mouseover", onClickPause);
-    stopEle.addEventListener("mouseover", onClickStop);
+  // Initially set the First Voice in the Array.
+  speech.voice = voices[0];
 
-    function onClickPlay() {
-      if (!flag) {
-        flag = true;
-        utterance = new SpeechSynthesisUtterance(
-          document.querySelector("article").textContent
-        );
-        utterance.voice = synth.getVoices()[1];
-        utterance.onend = function () {
-          flag = false;
-        };
-        synth.speak(utterance);
-      }
-      if (synth.paused) {
-        /* unpause/resume narration */
-        synth.resume();
-      }
-    }
-    function onClickPause() {
-      if (synth.speaking && !synth.paused) {
-        /* pause narration */
-        synth.pause();
-      }
-    }
-    function onClickStop() {
-      if (synth.speaking) {
-        /* stop narration */
-        /* for safari */
-        flag = false;
-        synth.cancel();
-      }
-    }
-  }
+  // Set the Voice Select List. (Set the Index as the value, which we'll use later when the user updates the Voice using the Select Menu.)
+  let voiceSelect = document.querySelector("#voices");
+  voices.forEach(
+    (voice, i) => (voiceSelect.options[i] = new Option(voice.name, i))
+  );
 };
 
-//#region get_voices
-function populateVoiceList() {
-  if (typeof speechSynthesis === "undefined") {
-    return;
-  }
+document.querySelector("#rate").addEventListener("input", () => {
+  // Get rate Value from the input
+  const rate = document.querySelector("#rate").value;
 
-  const voices = speechSynthesis.getVoices();
+  // Set rate property of the SpeechSynthesisUtterance instance
+  speech.rate = rate;
 
-  for (let i = 0; i < voices.length; i++) {
-    const option = document.createElement("option");
-    option.textContent = `${voices[i].name} (${voices[i].lang})`;
+  // Update the rate label
+  document.querySelector("#rate-label").innerHTML = rate;
+});
 
-    if (voices[i].default) {
-      option.textContent += " — DEFAULT";
-    }
+document.querySelector("#volume").addEventListener("input", () => {
+  // Get volume Value from the input
+  const volume = document.querySelector("#volume").value;
 
-    option.setAttribute("data-lang", voices[i].lang);
-    option.setAttribute("data-name", voices[i].name);
-    document.getElementById("voiceSelect").appendChild(option);
-  }
-}
+  // Set volume property of the SpeechSynthesisUtterance instance
+  speech.volume = volume;
 
-populateVoiceList();
-if (
-  typeof speechSynthesis !== "undefined" &&
-  speechSynthesis.onvoiceschanged !== undefined
-) {
-  speechSynthesis.onvoiceschanged = populateVoiceList;
-}
-//#endregion
+  // Update the volume label
+  document.querySelector("#volume-label").innerHTML = volume;
+});
 
-//#region mousehover
-// let test = document.getElementById("test");
+document.querySelector("#pitch").addEventListener("input", () => {
+  // Get pitch Value from the input
+  const pitch = document.querySelector("#pitch").value;
 
-// test.addEventListener("mouseover", function( event ) {
-//   alert("Hola: ", event);
-// });
+  // Set pitch property of the SpeechSynthesisUtterance instance
+  speech.pitch = pitch;
 
+  // Update the pitch label
+  document.querySelector("#pitch-label").innerHTML = pitch;
+});
 
-// test.addEventListener("mouseout", function( event ) {
-//   event.target.style.background = "orange";
-// });
-//#endregion mousehover
+document.querySelector("#voices").addEventListener("change", () => {
+  // On Voice change, use the value of the select menu (which is the index of the voice in the global voice array)
+  speech.voice = voices[document.querySelector("#voices").value];
+});
 
-container.onmouseover = container.onmouseout = handler;
+document.querySelector("#start").addEventListener("click", () => {
+  // Set the text property with the value of the textarea
+  var text = document.getElementsByClassName("read");
+  speech.text = text[0].innerHTML;
+  // Start Speaking
+  window.speechSynthesis.speak(speech);
+});
 
-function handler(event) {
+document.querySelector("#pause").addEventListener("click", () => {
+  // Pause the speechSynthesis instance
+  window.speechSynthesis.pause();
+});
 
-  function str(el) {
-    if (!el) return "null"
-    return el.className || el.tagName;
-  }
+document.querySelector("#resume").addEventListener("click", () => {
+  // Resume the paused speechSynthesis instance
+  window.speechSynthesis.resume();
+});
 
-  log.value += event.type + ':  ' +
-    'target=' + str(event.target) +
-    ',  relatedTarget=' + str(event.relatedTarget) + "\n";
-  log.scrollTop = log.scrollHeight;
-
-  if (event.type == 'mouseover') {
-    event.target.style.background = 'pink'
-  }
-  if (event.type == 'mouseout') {
-    event.target.style.background = ''
-  }
-}
+document.querySelector("#cancel").addEventListener("click", () => {
+  // Cancel the speechSynthesis instance
+  window.speechSynthesis.cancel();
+});

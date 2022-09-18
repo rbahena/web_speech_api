@@ -1,28 +1,90 @@
-<!DOCTYPE html>
 <html lang="es">
   <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TEXT TO VOICE - JAVASCRIPT</title>
-    <link rel="stylesheet" href="./css/index.css" />
-  </head>
-  <body>
-    <div>
-      <button id="play">Play</button>
-      <button id="pause">Pause</button>
-      <button id="stop">Stop</button>
-    </div>
-    <article>
-      <p>
-        Hace 104 años, la Constitución mexicana fue pionera a nivel mundial por
-        su contenido sobre derechos sociales, dentro de los que destacan los
-        postulados de la justicia laboral. Ese régimen jurídico.
-      </p>
-    </article>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <title>Text to Speech</title>
 
-    <select id="voiceSelect"></select>
-    
-    <script src="./js/index.js"></script>
+    <style>
+      .card {
+        padding: 1rem 1.5rem;
+        border-radius: 7px;
+        box-shadow: rgb(45 46 46 / 35%) 0px 4px 32px 0px,
+          rgb(45 46 46 / 8%) 0px 4px 16px 0px,
+          rgb(45 46 46 / 10%) 0px 0px 4px 0px;
+      }
+    </style>
+  </head>
+
+  <body class="container mt-5 bg-light">
+    <div class="card">
+      <h2>Convert Text to Speech</h2>
+      <h5>Listen to those words!</h5>
+      <p class="lead mt-4">Select Voice</p>
+
+      <!-- Select Menu for Voice -->
+      <select id="voices" class="form-select"></select>
+
+      <!-- Range Slliders for Volume, Rate & Pitch -->
+      <div class="d-flex mt-4">
+        <div>
+          <p class="lead">Volume</p>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            value="1"
+            step="0.1"
+            id="volume"
+          />
+          <span id="volume-label" class="ms-2">1</span>
+        </div>
+        <div class="mx-5">
+          <p class="lead">Rate</p>
+          <input
+            type="range"
+            min="0.1"
+            max="10"
+            value="1"
+            id="rate"
+            step="0.1"
+          />
+          <span id="rate-label" class="ms-2">1</span>
+        </div>
+        <div>
+          <p class="lead">Pitch</p>
+          <input type="range" min="0" max="1" value="1" step="0.1" id="pitch" />
+          <span id="pitch-label" class="ms-2">1</span>
+        </div>
+      </div>
+
+      <!-- Text Area  for the User to Type -->
+      <!-- <textarea class="form-control mt-5" cols="30" rows="10" placeholder="Type here..."></textarea> -->
+      <div>
+        <p class="read">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia hic
+          nesciunt nihil culpa perspiciatis quos veniam maxime, ex veritatis
+          tenetur rem neque, possimus modi aliquid nostrum ab, temporibus cum
+          perferendis!
+        </p>
+
+        <article class="read">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. In deserunt,
+          ad autem, adipisci tempore beatae ea dignissimos numquam libero culpa
+          inventore dolorem maxime porro quisquam. Sed, in. Architecto,
+          blanditiis placeat.
+        </article>
+      </div>
+
+      <!-- Control Buttons -->
+      <div class="mb-5">
+        <button id="start" class="btn btn-success mt-5 me-3">Start</button>
+        <button id="pause" class="btn btn-warning mt-5 me-3">Pause</button>
+        <button id="resume" class="btn btn-info mt-5 me-3">Resume</button>
+        <button id="cancel" class="btn btn-danger mt-5 me-3">Cancel</button>
+      </div>
+    </div>
   </body>
+  <script src="./js/index.js"></script>
 </html>
