@@ -1,5 +1,7 @@
 // Reference: https://betterprogramming.pub/convert-text-to-speech-using-web-speech-api-in-javascript-c9710bbb2d41
 
+var text_read = '';
+
 // Initialize new SpeechSynthesisUtterance object
 let speech = new SpeechSynthesisUtterance();
 
@@ -9,6 +11,15 @@ speech.lang = "es";
 let voices = []; // global array of available voices
 
 window.speechSynthesis.onvoiceschanged = () => {
+
+  // Get all text to read
+  var texts = document.getElementsByClassName("read");
+  for (let index = 0; index < texts.length; index++) {
+    text_read = text_read + texts[index].innerHTML;
+  }
+  readingTime(text_read);
+
+
   // Get List of Voices
   voices = window.speechSynthesis.getVoices();
 
@@ -86,3 +97,11 @@ document.querySelector("#cancel").addEventListener("click", () => {
   // Cancel the speechSynthesis instance
   window.speechSynthesis.cancel();
 });
+
+function readingTime(text) {
+  // const text = document.getElementById("article").innerText;
+  const wpm = 225;
+  const words = text.trim().split(/\s+/).length;
+  const time = Math.abs(words / wpm).toFixed(2);
+  document.getElementById("time").innerText = time;
+}
