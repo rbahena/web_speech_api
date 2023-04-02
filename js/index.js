@@ -1,5 +1,3 @@
-// Reference: https://www.ebooz.com/como-anadir-un-sintetizador-de-texto-a-voz-de-audio-a-tu-pagina-web/
-
 onload = function () {
   if ("speechSynthesis" in window) {
     /* speech synthesis supported */
